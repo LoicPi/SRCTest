@@ -1,13 +1,21 @@
 package com.dummy.myerp.model.bean.comptabilite;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+
 import java.math.BigDecimal;
 
 import org.apache.commons.lang3.ObjectUtils;
-import org.junit.Assert;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
 
 
+@RunWith(MockitoJUnitRunner.class)
 public class EcritureComptableTest {
+
 
     private LigneEcritureComptable createLigne(Integer pCompteComptableNumero, String pDebit, String pCredit) {
         BigDecimal vDebit = pDebit == null ? null : new BigDecimal(pDebit);
@@ -19,26 +27,67 @@ public class EcritureComptableTest {
                                                                     vDebit, vCredit);
         return vRetour;
     }
-
-    @Test
-    public void isEquilibree() {
-        EcritureComptable vEcriture;
+    
+    private EcritureComptable vEcriture;
+    
+    @Before
+    public void initEcritureComptable() {
+    	
         vEcriture = new EcritureComptable();
-
-        vEcriture.setLibelle("Equilibrée");
+        
         vEcriture.getListLigneEcriture().add(this.createLigne(1, "200.50", null));
         vEcriture.getListLigneEcriture().add(this.createLigne(1, "100.50", "33"));
         vEcriture.getListLigneEcriture().add(this.createLigne(2, null, "301"));
         vEcriture.getListLigneEcriture().add(this.createLigne(2, "40", "7"));
-        Assert.assertTrue(vEcriture.toString(), vEcriture.isEquilibree());
-
-        vEcriture.getListLigneEcriture().clear();
-        vEcriture.setLibelle("Non équilibrée");
-        vEcriture.getListLigneEcriture().add(this.createLigne(1, "10", null));
-        vEcriture.getListLigneEcriture().add(this.createLigne(1, "20", "1"));
-        vEcriture.getListLigneEcriture().add(this.createLigne(2, null, "30"));
-        vEcriture.getListLigneEcriture().add(this.createLigne(2, "1", "2"));
-        Assert.assertFalse(vEcriture.toString(), vEcriture.isEquilibree());
     }
+    
+//    @After
+//    public void undefEcritureComptable() {
+//    	vEcriture.getListLigneEcriture().clear();
+//    }
+    
+    @Test
+    public void getTotalDebit_Test() {
+    	
+        BigDecimal totalDebit = vEcriture.getTotalDebit();
+        
+        assertThat(totalDebit.intValueExact()).isEqualTo(341);
+    }
+    
+    @Test
+    public void getTotalCredit_Test() {
+    	
+        BigDecimal totalCredit = vEcriture.getTotalCredit();
+        
+        assertThat(totalCredit.intValueExact()).isEqualTo(341);
+    }
+
+    @Test
+    public void isEquilibree() {        
+        
+    	assertThat(vEcriture.isEquilibree()).isEqualTo(true);
+//    	
+//        Assert.assertTrue(vEcriture.toString(), vEcriture.isEquilibree());
+//
+//        vEcriture.getListLigneEcriture().clear();
+//        vEcriture.setLibelle("Non équilibrée");
+//        vEcriture.getListLigneEcriture().add(this.createLigne(1, "10", null));
+//        vEcriture.getListLigneEcriture().add(this.createLigne(1, "20", "1"));
+//        vEcriture.getListLigneEcriture().add(this.createLigne(2, null, "30"));
+//        vEcriture.getListLigneEcriture().add(this.createLigne(2, "1", "2"));
+//        Assert.assertFalse(vEcriture.toString(), vEcriture.isEquilibree());
+    }
+    
+    @Test
+    public void isNotEquilibree() {
+
+    	vEcriture.getListLigneEcriture().add(this.createLigne(1, "10", null));
+    	
+    	BigDecimal totalCredit = vEcriture.getTotalCredit();
+    	BigDecimal totalDebit = vEcriture.getTotalDebit();    	
+    	
+    	assertThat(vEcriture.isEquilibree()).isEqualTo(false);
+    }
+    
 
 }

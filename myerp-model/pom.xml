@@ -1,77 +1,107 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <!-- =============================================================== -->
-    <!-- Project informations -->
-    <!-- =============================================================== -->
-    <!-- ===== Parent ===== -->
-    <parent>
-        <groupId>com.dummy.myerp</groupId>
-        <artifactId>myerp</artifactId>
-        <version>1.x.x-SNAPSHOT</version>
-        <relativePath>..</relativePath>
-    </parent>
+	<!-- =============================================================== -->
+	<!-- Project informations -->
+	<!-- =============================================================== -->
+	<!-- ===== Parent ===== -->
+	<parent>
+		<groupId>com.dummy.myerp</groupId>
+		<artifactId>myerp</artifactId>
+		<version>1.x.x-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
 
-    <!-- ===== Maven ===== -->
-    <artifactId>myerp-model</artifactId>
+	<!-- ===== Maven ===== -->
+	<artifactId>myerp-model</artifactId>
 
-    <!-- ===== General information ===== -->
-    <name>${project.artifactId}</name>
-
-
-    <!-- =============================================================== -->
-    <!-- Distrubution management -->
-    <!-- =============================================================== -->
-    <distributionManagement>
-        <site>
-            <id>site</id>
-            <name>site-doc</name>
-            <url>file://${basedir}/../target/site-doc/${project.artifactId}/</url>
-        </site>
-    </distributionManagement>
+	<!-- ===== General information ===== -->
+	<name>${project.artifactId}</name>
 
 
-    <!-- =============================================================== -->
-    <!-- Properties -->
-    <!-- =============================================================== -->
-    <properties>
-    </properties>
+	<!-- =============================================================== -->
+	<!-- Distrubution management -->
+	<!-- =============================================================== -->
+	<distributionManagement>
+		<site>
+			<id>site</id>
+			<name>site-doc</name>
+			<url>file://${basedir}/../target/site-doc/${project.artifactId}/</url>
+		</site>
+	</distributionManagement>
 
 
-    <!-- =============================================================== -->
-    <!-- Dependencies -->
-    <!-- =============================================================== -->
-    <dependencies>
-    <!-- ===== Modules ===== -->
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>myerp-technical</artifactId>
-        </dependency>
+	<!-- =============================================================== -->
+	<!-- Properties -->
+	<!-- =============================================================== -->
+	<properties>
+	</properties>
 
 
-        <!-- ========== Test Dependencies ========== -->
-        <!-- ===== Tests ===== -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- ===== JSR 303 - Bean validation ===== -->
-        <!-- implementation -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+	<!-- =============================================================== -->
+	<!-- Dependencies -->
+	<!-- =============================================================== -->
+	<dependencies>
+		<!-- ===== Modules ===== -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>myerp-technical</artifactId>
+		</dependency>
 
 
-    <!-- =============================================================== -->
-    <!-- Build -->
-    <!-- =============================================================== -->
-    <build>
-    </build>
+		<!-- ========== Test Dependencies ========== -->
+		<!-- ===== Tests ===== -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+		</dependency>
+		<!-- Commons Logging Bridge -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-jcl</artifactId>
+		</dependency>
+		<!-- Log4j 2 SLF4J Binding -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+		</dependency>
+
+		<!-- ===== JSR 303 - Bean validation ===== -->
+		<!-- implementation -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+
+	<!-- =============================================================== -->
+	<!-- Build -->
+	<!-- =============================================================== -->
+	<build>
+	</build>
 </project>
