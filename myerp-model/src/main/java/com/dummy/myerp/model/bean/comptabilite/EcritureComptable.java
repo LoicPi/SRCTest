@@ -98,7 +98,7 @@ public class EcritureComptable {
     public BigDecimal getTotalCredit() {
         BigDecimal vRetour = BigDecimal.ZERO;
         for (LigneEcritureComptable vLigneEcritureComptable : listLigneEcriture) {
-        	//TODO modif à dire
+        	//Modification sur le paramètre utilisé car utilisation du débit au lieu du crédit
             if (vLigneEcritureComptable.getCredit() != null) {
                 vRetour = vRetour.add(vLigneEcritureComptable.getCredit());
             }
