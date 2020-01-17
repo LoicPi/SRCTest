@@ -24,10 +24,12 @@ public class EcritureComptable {
     /** Journal comptable */
     @NotNull private JournalComptable journal;
     /** The Reference. */
-    @Pattern(regexp = "\\d{1,5}-\\d{4}/\\d{5}")
+    //Correction sur la regex car prenait en premier instance des chiffres au lieu de lettres
+    @Pattern(regexp = "^[A-Za-z]{1,5}-\\d{4}\\/\\d{5}")
     private String reference;
     /** The Date. */
-    @NotNull private Date date;
+    @NotNull 
+    private Date date;
 
     /** The Libelle. */
     @NotNull
