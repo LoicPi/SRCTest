@@ -1,6 +1,7 @@
 package com.dummy.myerp.business.impl.manager;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
@@ -79,11 +80,11 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
     /**
      * {@inheritDoc}
      */
-    // TODO à tester
     @Override
     public void checkEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException {
         this.checkEcritureComptableUnit(pEcritureComptable);
         this.checkEcritureComptableContext(pEcritureComptable);
+        this.checkEcritureComptableDigitsDecimalPoint(pEcritureComptable);
     }
 
 
@@ -94,7 +95,6 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
      * @param pEcritureComptable -
      * @throws FunctionalException Si l'Ecriture comptable ne respecte pas les règles de gestion
      */
-    // TODO tests à compléter
     protected void checkEcritureComptableUnit(EcritureComptable pEcritureComptable) throws FunctionalException {
         // ===== Vérification des contraintes unitaires sur les attributs de l'écriture
         Set<ConstraintViolation<EcritureComptable>> vViolations = getConstraintValidator().validate(pEcritureComptable);
@@ -132,8 +132,30 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
                 "L'écriture comptable doit avoir au moins deux lignes : une ligne au débit et une ligne au crédit.");
         }
 
-        // TODO ===== RG_Compta_5 : Format et contenu de la référence
+        // RG_Compta_5 : Format et contenu de la référence
         // vérifier que l'année dans la référence correspond bien à la date de l'écriture, idem pour le code journal...
+        if(pEcritureComptable.getReference() != null) {
+        	String ref = pEcritureComptable.getReference();
+        	String codeJournal = pEcritureComptable.getJournal().getCode();
+        	
+        	String codeRef = ref.substring(0, ref.indexOf("-"));
+        	
+        	String anneeRef = ref.substring(ref.indexOf("-")+1, ref.indexOf("/"));
+        	
+        	Calendar calendar = Calendar.getInstance();
+        	
+        	calendar.setTime(pEcritureComptable.getDate());
+        	
+        	String anneeDate = String.valueOf(calendar.get(Calendar.YEAR));
+        	
+        	if (!codeRef.equals(codeJournal)) {
+        		throw new FunctionalException("La référence de l'écriture comptable contient un code de journal différent du code du journal de l'écriture comptable.");
+        	}
+        	
+        	if(!anneeDate.equals(anneeRef)) {
+        		throw new FunctionalException("L'année de la date de l'écriture comptable est différente de l'année du journal.");
+        	}
+        }
     }
 
 
@@ -165,6 +187,29 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         }
     }
 
+    /*
+     * Vérifie que l'Ecriture Comptable respecte les règles de gestion liées aux nombres de chiffres après la virgule
+     *
+     *@param pEcritureComptable
+     *@throws FunctionalException Si l'Ecriture comptable ne respecte pas les règles de gestion
+     */
+    protected void checkEcritureComptableDigitsDecimalPoint(EcritureComptable pEcritureComptable) throws FunctionalException {
+    	// RG_Compta 7 : Les montants des lignes d'écritures peuvent comporter 2 chiffres maximum après la virgule
+        // On vérifie que seul 2 chiffres apparaît après la virgule pour chacune des lignes d'écritures
+        for (LigneEcritureComptable vLigneEcritureComptable : pEcritureComptable.getListLigneEcriture()) {
+        	if (BigDecimal.ZERO.compareTo(ObjectUtils.defaultIfNull(vLigneEcritureComptable.getCredit(),
+                    BigDecimal.ZERO)) != 0) {
+        		if (vLigneEcritureComptable.getCredit().scale() > 2 ) {
+        			throw new FunctionalException("L'écriture comptable contient une ligne d'écriture de crédit contenant plus de 2 chiffres après la virgule.");
+        		}
+        	} else {
+        		if (vLigneEcritureComptable.getDebit().scale() > 2 ) {
+        			throw new FunctionalException("L'écriture comptable contient une ligne d'écriture de débit contenant plus de 2 chiffres après la virgule.");
+        		}
+        	}
+        }
+    }
+    
     /**
      * {@inheritDoc}
      */
