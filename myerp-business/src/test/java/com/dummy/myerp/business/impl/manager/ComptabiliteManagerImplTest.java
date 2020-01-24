@@ -3,8 +3,10 @@ package com.dummy.myerp.business.impl.manager;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +14,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 
 import com.dummy.myerp.business.impl.AbstractBusinessManager;
@@ -36,7 +40,9 @@ public class ComptabiliteManagerImplTest {
     
     private LigneEcritureComptable ligneEcritureCredit;
     
-    private SequenceEcritureComptable vSequence;
+    private SequenceEcritureComptable vSequenceEcritureComptable;
+    
+    private List<SequenceEcritureComptable> listSequenceEcritureComptable;
     
     @Mock
     private DaoProxy mockDaoProxy;
@@ -56,13 +62,17 @@ public class ComptabiliteManagerImplTest {
         vEcritureComptable = new EcritureComptable();
         vEcritureComptable.setId(1);
         vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
-        Calendar calendar = new GregorianCalendar(2020,0,21);
+        Calendar calendar = new GregorianCalendar(2020,01,21);
         vEcritureComptable.setDate(calendar.getTime());
         vEcritureComptable.setReference("AC-2020/00001");
         vEcritureComptable.setLibelle("Libelle");
         
         ligneEcritureDebit = new LigneEcritureComptable(new CompteComptable(1), null, new BigDecimal("123"), null);
         ligneEcritureCredit = new LigneEcritureComptable(new CompteComptable(2), null, null, new BigDecimal("123"));
+    
+        vSequenceEcritureComptable = new SequenceEcritureComptable("AC", 2020, 23);
+        
+        listSequenceEcritureComptable = new ArrayList<>();
     }
     
     /*
@@ -240,5 +250,27 @@ public class ComptabiliteManagerImplTest {
     	vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1), null, new BigDecimal("-123"), null));
     	vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2), null, null, new BigDecimal("-123")));
     	manager.checkEcritureComptable(vEcritureComptable);
+    }
+    
+    /*
+     * Vérifie qu'une référence est généré si aucune séquence n'existe
+     */
+    @Test
+    public void addReference_PasDeSequenceExistante_Test() throws Exception {
+    	vEcritureComptable.setReference("");
+    	when(this.mockComptabiliteDao.getListSequenceEcritureComptable(anyInt())).thenReturn(listSequenceEcritureComptable);
+    	manager.addReference(vEcritureComptable);
+    	assertThat(vEcritureComptable.getReference()).isEqualTo("AC-2020/00001");
+    }
+    
+    /*
+     * Vérifie qu'une référence est généré avec une séquence existante et la dernière valeur de la sequence de l'écriture comptable sera un chiffre au dessus de celui auparavant
+     */
+    @Test
+    public void addReference_SequenceExistante_Test() throws Exception {
+    	listSequenceEcritureComptable.add(vSequenceEcritureComptable);
+    	when(this.mockComptabiliteDao.getListSequenceEcritureComptable(anyInt())).thenReturn(listSequenceEcritureComptable);
+    	manager.addReference(vEcritureComptable);
+    	assertThat(vEcritureComptable.getReference()).isEqualTo("AC-2020/00024");
     }
 }
