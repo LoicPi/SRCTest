@@ -6,7 +6,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.math.BigDecimal;
 
 import org.apache.commons.lang3.ObjectUtils;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,8 +28,6 @@ public class EcritureComptableTest {
     }
     
     private EcritureComptable vEcriture;
-    
-    private EcritureComptable ecritureComptable;
     
     @Before
     public void initEcritureComptable() {
