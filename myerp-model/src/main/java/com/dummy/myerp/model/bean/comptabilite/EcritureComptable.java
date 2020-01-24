@@ -76,6 +76,32 @@ public class EcritureComptable {
     public List<LigneEcritureComptable> getListLigneEcriture() {
         return listLigneEcriture;
     }
+    
+    // ==================== HashCode/Equals ====================
+    @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+    
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EcritureComptable other = (EcritureComptable) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
 
     /**
      * Calcul et renvoie le total des montants au débit des lignes d'écriture
@@ -117,8 +143,8 @@ public class EcritureComptable {
         boolean vRetour = (this.getTotalDebit().compareTo(getTotalCredit())==0);
         return vRetour;
     }
-
-    // ==================== Méthodes ====================
+	
+	// ==================== Méthodes ====================
     @Override
     public String toString() {
         final StringBuilder vStB = new StringBuilder(this.getClass().getSimpleName());
