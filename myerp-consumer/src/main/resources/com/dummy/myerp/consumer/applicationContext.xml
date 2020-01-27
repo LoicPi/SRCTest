@@ -42,9 +42,17 @@
     </bean>
 
 
-    <!-- ==================== Databases ==================== -->
-    <bean id="dataSourceMYERP" class="com.dummy.myerp.technical.util.spring.NullFactoryBean">
+   <!-- ==================== Databases ==================== -->
+    <!--<bean id="dataSourceMYERP" class="com.dummy.myerp.technical.util.spring.NullFactoryBean">-->
+    <!--<constructor-arg value="javax.sql.DataSource"/>-->
+    <!--</bean>-->
+
+    <bean id="dataSourceMYERP" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <constructor-arg value="javax.sql.DataSource"/>
+        <property name="driverClassName" value="org.postgresql.Driver" />
+        <property name="url" value="jdbc:postgresql://127.0.0.1:9032/db_myerp"/>
+        <property name="username" value="usr_myerp"/>
+        <property name="password" value="myerp"/>
     </bean>
 
 
