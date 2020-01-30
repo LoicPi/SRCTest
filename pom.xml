@@ -54,7 +54,6 @@
 		<!-- ===== Version properties ===== -->
 		<log4j.version>2.8.1</log4j.version>
 		<spring.version>4.3.7.RELEASE</spring.version>
-		<jacoco.version>0.8.5</jacoco.version>
 	</properties>
 
 
@@ -420,10 +419,11 @@
 					<artifactId>build-helper-maven-plugin</artifactId>
 					<version>1.10</version>
 				</plugin>
+				<!-- ===== Jacoco ===== -->
 				<plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>${jacoco.version}</version>
+                    <version>0.8.5</version>
                 </plugin>
 			</plugins>
 		</pluginManagement>
